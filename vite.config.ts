@@ -1,3 +1,12 @@
-import { defineConfig } from "vite";
+import {defineConfig} from "vite";
 import react from "@vitejs/plugin-react";
-export default defineConfig({ plugins: [react()] });
+
+// Vercel's Supabase integration exposes publishable client credentials.
+// Only these public values are injected into browser code; never server secrets.
+export default defineConfig({
+  plugins:[react()],
+  define:{
+    "import.meta.env.VITE_SUPABASE_URL":JSON.stringify(process.env.VITE_SUPABASE_URL||process.env.NEXT_PUBLIC_SUPABASE_URL||process.env.SUPABASE_URL||""),
+    "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY":JSON.stringify(process.env.VITE_SUPABASE_PUBLISHABLE_KEY||process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY||process.env.SUPABASE_PUBLISHABLE_KEY||"")
+  }
+});
